@@ -1,3 +1,6 @@
 *.iml
 .idea/
+.gradle/
 target/
+classes/
+imports cleaner.jar
