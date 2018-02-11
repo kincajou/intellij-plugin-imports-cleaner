@@ -1,0 +1,31 @@
+<idea-plugin>
+  <id>org.kincajou</id>
+  <name>Java Imports Cleaner</name>
+  <version>1.0</version>
+  <vendor email="kincajou@gmail.com" url="https://www.github.com/kincajou">kincajou</vendor>
+
+  <description><![CDATA[
+      Optimize java imports without reordering them.
+    ]]></description>
+
+  <change-notes><![CDATA[
+        Release notes: <a href="https://github.com/kincajou/intellij-plugin-imports-cleaner/releases">https://github.com/kincajou/intellij-plugin-imports-cleaner/releases</a>
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="173.0"/>
+
+  <depends>com.intellij.modules.java</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+  </extensions>
+
+  <actions>
+  </actions>
+
+    <application-components>
+        <component>
+            <implementation-class>org.kincajou.Component</implementation-class>
+        </component>
+    </application-components>
+</idea-plugin>
