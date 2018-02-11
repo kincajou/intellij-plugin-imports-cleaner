@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class Component implements ApplicationComponent {
 
-    private static final String COMPONENT_NAME = "Java Imports Cleaner";
+  private static final String COMPONENT_NAME = "Java Imports Cleaner";
 
-    @Override
-    public void initComponent() {
-        LanguageImportStatements.INSTANCE.addExplicitExtension(JavaLanguage.INSTANCE, new JavaImportCleaner());
-    }
+  @Override
+  public void initComponent() {
+    LanguageImportStatements.INSTANCE.addExplicitExtension(JavaLanguage.INSTANCE, new JavaImportCleaner());
+  }
 
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return COMPONENT_NAME;
-    }
+  @NotNull
+  @Override
+  public String getComponentName() {
+    return COMPONENT_NAME;
+  }
 }
