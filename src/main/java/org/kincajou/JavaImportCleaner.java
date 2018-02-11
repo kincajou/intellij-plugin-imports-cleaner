@@ -1,23 +1,19 @@
 package org.kincajou;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import com.intellij.lang.java.JavaImportOptimizer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiImportStatementBase;
-import com.intellij.psi.PsiImportStaticStatement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 import java.util.Arrays;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 public class JavaImportCleaner extends JavaImportOptimizer {
@@ -51,44 +47,59 @@ public class JavaImportCleaner extends JavaImportOptimizer {
           final PsiImportList oldImportList = ((PsiJavaFile) file).getImportList();
           assert oldImportList != null;
 
-          for (PsiImportStatementBase statement : oldImportList.getAllImportStatements()) {
-            deleteExistingStatement(statement, newImportList.getAllImportStatements(), oldImportList);
-          }
+          myImportsRemoved = (int) Arrays.stream(oldImportList.getAllImportStatements())
+            .map(s -> deleteExistingStatement(s, newImportList, oldImportList))
+            .filter(d -> d)
+            .count();
 
-          final Multiset<PsiElement> oldImports = HashMultiset.create();
-          for (PsiImportStatement statement : oldImportList.getImportStatements()) {
-            oldImports.add(statement.resolve());
-          }
-
-          final Multiset<PsiElement> oldStaticImports = HashMultiset.create();
-          for (PsiImportStaticStatement statement : oldImportList.getImportStaticStatements()) {
-            oldStaticImports.add(statement.resolve());
-          }
-
-          for (PsiImportStatement statement : newImportList.getImportStatements()) {
-            if (!oldImports.remove(statement.resolve())) {
+          // imports can be added when weight of * wildcard is high, so optimizing will remove star import and add actual ones
+          PsiImportStatementBase previous = null;
+          for (PsiImportStatementBase statement : newImportList.getAllImportStatements()) {
+            boolean added = addNewStatement(previous, statement, oldImportList);
+            previous = statement;
+            if (added) {
               myImportsAdded++;
             }
           }
-          myImportsRemoved += oldImports.size();
-
-          for (PsiImportStaticStatement statement : newImportList.getImportStaticStatements()) {
-            if (!oldStaticImports.remove(statement.resolve())) {
-              myImportsAdded++;
-            }
-          }
-          myImportsRemoved += oldStaticImports.size();
         }
         catch (IncorrectOperationException e) {
           LOG.error(e);
         }
       }
 
-      private void deleteExistingStatement(PsiImportStatementBase statement, PsiImportStatementBase[] newStatements, PsiImportList oldList) {
-        boolean exists = Arrays.stream(newStatements).map(PsiImportStatementBase::getText).anyMatch(t -> statement.getText().equals(t));
+      private boolean deleteExistingStatement(PsiImportStatementBase statement, PsiImportList newList, PsiImportList oldList) {
+        boolean exists = find(statement, newList).isPresent();
         if (!exists) {
           oldList.deleteChildRange(statement, statement);
         }
+        return !exists;
+      }
+
+      private boolean addNewStatement(PsiImportStatementBase previous, PsiImportStatementBase current, PsiImportList oldList) {
+        Optional<PsiImportStatementBase> existing = find(current, oldList);
+        if (existing.isPresent()) {
+          return false;
+        }
+        if (previous == null) {
+          // previous is null, add at the beginning
+          if (oldList.getAllImportStatements().length == 0) {
+            // no import statements, just add
+            oldList.add(current.copy());
+          }
+          else {
+            // add before first
+            oldList.addBefore(current.copy(), oldList.getAllImportStatements()[0]);
+          }
+          return true;
+        }
+        Optional<PsiImportStatementBase> previousExisting = find(previous, oldList);
+        // previousExisting always exists because it was either just added or was already there from the start
+        oldList.addAfter(current.copy(), previousExisting.get());
+        return true;
+      }
+
+      private Optional<PsiImportStatementBase> find(PsiImportStatementBase statement, PsiImportList list) {
+        return Arrays.stream(list.getAllImportStatements()).filter(s -> statement.getText().equals(s.getText())).findFirst();
       }
 
       @Override
