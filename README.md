@@ -1,1 +1,22 @@
-Intellij plugin: Java Imports Cleaner
+# Intellij plugin: Java Imports Cleaner
+
+Default IDEA mechanic of imports optimization changes the order of import statements. That leads to messy commit history in big projects with 
+different code style. This plugin replaces that mechanic, and, while keeping all the features, won't change the order of import statements.
+ 
+ ## Installation
+ 
+ - download the jar file from [releases page](https://github.com/kincajou/intellij-plugin-imports-cleaner/releases)
+ - open IDEA settings, Plugins tab, select 'Install plugin from disk...' and point it to the downloaded file
+ 
+ Once installed, the plugin will start working immediately. There is no configuration.
+ 
+ ## Usage
+ 
+ Once plugin is installed, default shortcut 'Ctrl+Alt+O' will work same as before except the order of imports will not be changed.
+ 
+ Note that 'Optimize imports on the fly' option is not compatible with this plugin and uses default behavior that performs reorder. To achieve 
+ automatic cleaning of unused imports (like i.e. Eclipse does), install [Save Actions](https://github.com/dubreuia/intellij-plugin-save-actions/) and 
+ configure it to 'Organize imports'. 
+ 
+  
+  
