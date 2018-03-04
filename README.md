@@ -4,11 +4,12 @@ Default IDEA mechanic of imports optimization changes the order of import statem
 different code style. This plugin replaces that mechanic, and, while keeping all the features, won't change the order of import statements.
  
  ## Installation
- 
+
+ - make sure IDEA version is 2017.3 or higher  
  - download the jar file from [releases page](https://github.com/kincajou/intellij-plugin-imports-cleaner/releases)
  - open IDEA settings, Plugins tab, select 'Install plugin from disk...' and point it to the downloaded file
  
- Once installed, the plugin will start working immediately. There is no configuration.
+ The plugin starts working immediately. There is no configuration.
  
  ## Usage
  
@@ -16,7 +17,13 @@ different code style. This plugin replaces that mechanic, and, while keeping all
  
  Note that 'Optimize imports on the fly' option is not compatible with this plugin and uses default behavior that performs reorder. To achieve 
  automatic cleaning of unused imports (like i.e. Eclipse does), install [Save Actions](https://github.com/dubreuia/intellij-plugin-save-actions/) and 
- configure it to 'Organize imports'. 
+ configure it to 'Organize imports'.
  
-  
+## Bugs / features
+
+Any bug reports or suggestions should be made via github [issues](https://github.com/kincajou/intellij-plugin-imports-cleaner/issues). 
+ 
+## Licence
+
+[MIT License](LICENSE.txt)  
   
