@@ -1,11 +1,11 @@
 # Intellij plugin: Java Imports Cleaner
 
 Default IDEA mechanic of imports optimization changes the order of import statements. That leads to messy commit history in big projects with 
-different code style. This plugin replaces that mechanic, and, while keeping all the features, won't change the order of import statements.
+different code styles. This plugin replaces that mechanic, and, while keeping all the features, disables changing the order of import statements.
  
  ## Installation
 
- - make sure IDEA version is 2017.3 or higher  
+ - make sure IDEA version is 2017.1 or higher / Android Studio 3.0.1 or higher  
  - download the jar file from [releases page](https://github.com/kincajou/intellij-plugin-imports-cleaner/releases)
  - open IDEA settings, Plugins tab, select 'Install plugin from disk...' and point it to the downloaded file
  
