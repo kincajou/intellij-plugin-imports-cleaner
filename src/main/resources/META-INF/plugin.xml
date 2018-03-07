@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>org.kincajou</id>
   <name>Java Imports Cleaner</name>
-  <version>1.1</version>
+  <version>1.2</version>
   <vendor email="kincajou@gmail.com" url="https://www.github.com/kincajou">kincajou</vendor>
 
   <description><![CDATA[
